@@ -9,7 +9,7 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.tghnx1.customexecrunner.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <postStartupActivity implementation="com.github.tghnx1.customexecrunner.startup.MyProjectActivity" />
+        <configurationType
+                implementation="com.github.tghnx1.customexecrunner.runconfig.CustomExecConfigurationType"/>
     </extensions>
 </idea-plugin>
