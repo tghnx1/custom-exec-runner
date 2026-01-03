@@ -1,7 +1,10 @@
-package com.github.tghnx1.customexecrunner.runconfig
+package com.github.tghnx1.customexecrunner.ui
 
+import com.github.tghnx1.customexecrunner.runconfig.CustomExecRunConfiguration
+import com.github.tghnx1.customexecrunner.runconfig.ExecMode
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.SettingsEditor
+import com.intellij.openapi.ui.TextBrowseFolderListener
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBTextField
 import com.intellij.util.ui.FormBuilder
@@ -30,11 +33,10 @@ class CustomExecSettingsEditor : SettingsEditor<CustomExecRunConfiguration>() {
         rustcRadio.isSelected = true
 
         val descriptor = FileChooserDescriptorFactory.createSingleFileDescriptor()
+        // simple implementation for task:
+        // deprecated API is acceptable here, as UI behavior is stable and simple
         executableField.addBrowseFolderListener(
-            "Select executable",
-            null,
-            null,
-            descriptor
+            TextBrowseFolderListener(descriptor, null)
         )
 
         panel = FormBuilder.createFormBuilder()

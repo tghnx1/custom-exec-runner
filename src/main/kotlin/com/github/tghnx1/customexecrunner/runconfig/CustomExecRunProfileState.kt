@@ -1,34 +1,40 @@
 package com.github.tghnx1.customexecrunner.runconfig
 
 import com.intellij.execution.ExecutionResult
+import com.intellij.execution.Executor
 import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.process.OSProcessHandler
-import com.intellij.execution.process.ProcessHandler
-import com.intellij.execution.runners.ExecutionEnvironment
+import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.ui.ConsoleView
 import com.intellij.execution.DefaultExecutionResult
-import com.intellij.openapi.project.Project
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.filters.TextConsoleBuilderFactory
+import com.intellij.execution.runners.ExecutionEnvironment
 
+// responsible for starting OS process and attaching console output
 class CustomExecRunProfileState(
-    private val executable: String,
-    private val args: String
+    private val environment: ExecutionEnvironment,
+    private val configuration: CustomExecRunConfiguration
 ) : RunProfileState {
 
     override fun execute(
-        executor: com.intellij.execution.Executor?,
-        runner: com.intellij.execution.runners.ProgramRunner<*>
+        executor: Executor,
+        runner: ProgramRunner<*>
     ): ExecutionResult {
 
-        val commandLine = GeneralCommandLine(executable)
-            .withParameters(args.split(" ").filter { it.isNotBlank() })
+        val cmd = GeneralCommandLine(configuration.resolveExecutable())
+            .withParameters(
+                configuration.arguments
+                    .split(" ")
+                    .filter { it.isNotBlank() }
+            )
+            .withWorkDirectory(environment.project.basePath)
 
-        val handler: ProcessHandler = OSProcessHandler(commandLine)
+        val handler = OSProcessHandler(cmd)
 
         val console: ConsoleView =
             TextConsoleBuilderFactory.getInstance()
-                .createBuilder(null as Project)
+                .createBuilder(environment.project)
                 .console
 
         console.attachToProcess(handler)
