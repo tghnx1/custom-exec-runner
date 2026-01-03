@@ -35,3 +35,11 @@ to run custom executables.
 ## Notes
 This plugin provides a simple execution configuration.
 It does not implement a custom debugger and relies on standard IDE process execution.
+
+## Tested edge-cases:
+Tested edge cases
+missing executable
+PATH-based executables not installed
+empty / whitespace arguments
+non-executable files
+UI state persistence between runs
